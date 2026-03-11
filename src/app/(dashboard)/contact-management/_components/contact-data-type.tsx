@@ -1,22 +1,29 @@
-export interface ContactApiResponse {
-  statusCode: number;
-  success: boolean;
-  message: string;
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-  };
-  data: ContactItem[];
-}
-
-export interface ContactItem {
+export interface Contact {
   _id: string;
-  fullName: string;
+  userId: string | null;
+  name: string;
   email: string;
   phone: string;
   message: string;
-  createdAt: string;  // or Date if you convert it
-  updatedAt: string;  // or Date if you convert it
+  status: "unread" | "read";
+  createdAt: string;
+  updatedAt: string;
   __v: number;
+}
+
+export interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalData: number;
+}
+
+export interface ContactsData {
+  items: Contact[];
+  paginationInfo: PaginationInfo;
+}
+
+export interface ContactsApiResponse {
+  status: boolean;
+  message: string;
+  data: ContactsData;
 }

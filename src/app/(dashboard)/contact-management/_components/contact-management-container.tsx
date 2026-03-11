@@ -10,31 +10,30 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DeleteModal from "@/components/modals/delete-modal";
-import ClaudePagination from "@/components/ui/claude-pagination";
 import { Trash, Eye } from "lucide-react";
 import ContactManagementView from "./contact-management-view";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ContactApiResponse, ContactItem } from "./contact-data-type";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import TableSkeletonWrapper from "@/components/shared/TableSkeletonWrapper/TableSkeletonWrapper";
 import ErrorContainer from "@/components/shared/ErrorContainer/ErrorContainer";
 import NotFound from "@/components/shared/NotFound/NotFound";
 import { toast } from "sonner";
+import { Contact, ContactsApiResponse } from "./contact-data-type";
 
 const ContactManagementContainer = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage] = useState(1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectViewContact, setSelectViewContact] = useState(false);
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
-  const [selectedContact, setSelectedContact] = useState<ContactItem | null>(null);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedContactId, setSelectedContactId] = useState("");
   const queryClient = useQueryClient();
 
 
 
-  const { data, isLoading, error, isError } = useQuery<ContactApiResponse>({
+  const { data, isLoading, error, isError } = useQuery<ContactsApiResponse>({
     queryKey: ["contact-management", currentPage],
     queryFn: async () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/contact?page=${currentPage}&limit=8`, {
@@ -48,7 +47,7 @@ const ContactManagementContainer = () => {
     enabled: !!token
   })
 
-  const totalPages = data?.meta ? Math.ceil(data.meta.total / data.meta.limit) : 0;
+  // const totalPages = data?.meta ? Math.ceil(data.meta.total / data.meta.limit) : 0;
 
 
 
@@ -70,7 +69,8 @@ const ContactManagementContainer = () => {
   } else if (
     data &&
     data?.data &&
-    data?.data?.length === 0
+    data?.data?.items &&
+    data?.data?.items?.length === 0
   ) {
     content = (
       <div>
@@ -78,7 +78,7 @@ const ContactManagementContainer = () => {
       </div>
     );
   }
-  else if (data && data?.data && data?.data?.length > 0){
+  else if (data && data?.data && data?.data?.items && data?.data?.items?.length > 0){
     content = (
         <Table className="">
           <TableHeader className="bg-[#E6F4E6] rounded-t-[12px]">
@@ -104,14 +104,14 @@ const ContactManagementContainer = () => {
             </TableRow>
           </TableHeader>
           <TableBody className="border-b border-x border-[#E6E7E6] rounded-b-[12px]">
-            {data?.data?.map((item, index) => {
+            {data?.data?.items?.map((item, index) => {
               return (
                 <TableRow key={index} className="">
                   <TableCell className="text-base font-medium text-[#68706A] leading-[150%] pl-6 py-4">
                     {item?.email}
                   </TableCell>
                   <TableCell className="text-base font-normal text-[#68706A] leading-[150%] text-center py-4">
-                    {item?.fullName}
+                    {item?.name}
                   </TableCell>
                   <TableCell className="text-base font-normal text-[#68706A] leading-[150%] text-center py-4">
                     {item?.phone}
@@ -191,7 +191,7 @@ const ContactManagementContainer = () => {
       <div>{content}</div>
 
         {/* pagination  */}
-        {
+        {/* {
           totalPages > 1 && (
             <div className="w-full flex items-center justify-between py-6">
               <p className="text-base font-normal text-[#68706A] leading-[150%]">
@@ -206,7 +206,7 @@ const ContactManagementContainer = () => {
               </div>
             </div>
           )
-        }
+        } */}
 
         {/* delete modal  */}
         {deleteModalOpen && (

@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import moment from "moment";
-import { ContactItem } from "./contact-data-type";
+import { Contact } from "./contact-data-type";
 
 const ContactManagementView = ({
   open,
@@ -10,7 +10,7 @@ const ContactManagementView = ({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  contactData: ContactItem | null;
+  contactData: Contact | null;
 }) => {
   if (!contactData) return null;
 
@@ -20,7 +20,7 @@ const ContactManagementView = ({
 
         <div className="space-y-4">
           <p className="text-base font-normal text-[#6C757D)] leading-[150%]">
-            <strong className="text-base font-semibold text-[#343A40] leading-[150%]">Name :</strong> <br/> {contactData?.fullName}
+            <strong className="text-base font-semibold text-[#343A40] leading-[150%]">Name :</strong> <br/> {contactData?.name}
           </p>
           <p className="text-base font-normal text-[#6C757D)] leading-[150%]">
             <strong className="text-base font-semibold text-[#343A40] leading-[150%]">Email :</strong> <br/> {contactData?.email}

@@ -24,6 +24,9 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 import logo from "../../../../public/assets/images/authLogo.png"
+import LogoutModal from "@/components/modals/logout-modal";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const items = [
   {
@@ -71,9 +74,22 @@ const items = [
 
 export function DashboardSidebar() {
   const pathName = usePathname();
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
+
+
+  const handLogout = async () => {
+    try {
+      toast.success("Logout successful!")
+      await signOut({ callbackUrl: "/login" })
+    } catch (error) {
+      console.error("Logout failed:", error)
+      toast.error("Logout failed. Please try again.")
+    }
+  }
 
   return (
-    <Sidebar className="border-none w-[320px]">
+    <div>
+      <Sidebar className="border-none w-[320px]">
       <SidebarContent className="bg-white scrollbar-hide">
         <SidebarGroup className="p-0">
           <div className="flex flex-col justify-between min-h-screen pb-5">
@@ -121,7 +137,7 @@ export function DashboardSidebar() {
 
             <div>
               <SidebarFooter className="border-t border-gray-300">
-                <button onClick={()=>signOut({callbackUrl:"/login"})} className="font-medium text-red-500 flex items-center gap-2 pl-2 mt-5">
+                <button onClick={() => setLogoutModalOpen(true)} className="font-medium text-red-500 flex items-center gap-2 pl-2 mt-5">
                   <LogOut className="h-4 w-4" /> Log out
                 </button>
               </SidebarFooter>
@@ -130,5 +146,17 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
+
+    {/* logout modal  */}
+    <div>
+      {logoutModalOpen && (
+        <LogoutModal
+          isOpen={logoutModalOpen}
+          onClose={() => setLogoutModalOpen(false)}
+          onConfirm={handLogout}
+        />
+      )}
+    </div>
+    </div>
   );
 }

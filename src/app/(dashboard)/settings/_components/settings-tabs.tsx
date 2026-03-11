@@ -12,7 +12,7 @@ const SettingsTabs = () => {
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6 pt-8">
           <button
-            className={`md:col-span-1 w-full h-[48px] text-base text-primary rounded-[6px] leading-[120%] font-semibold border border-[#10e607] py-3 px-7 ${isActive === "personal-information" &&
+            className={`md:col-span-1 w-full h-[48px] text-base text-primary rounded-[6px] leading-[120%] font-semibold border border-primary py-3 px-7 ${isActive === "personal-information" &&
               "bg-primary text-white rounded-[6px] py-3 px-7"
               }`}
             onClick={() => setIsActive("personal-information")}
@@ -20,7 +20,7 @@ const SettingsTabs = () => {
             Personal Information
           </button>
           <button
-            className={`md:col-span-1 w-full h-[48px] text-base text-primary rounded-[6px] leading-[120%] font-semibold border border-[#10e607] py-3 px-7 ${isActive === "change-password" &&
+            className={`md:col-span-1 w-full h-[48px] text-base text-primary rounded-[6px] leading-[120%] font-semibold border border-primary py-3 px-7 ${isActive === "change-password" &&
               "bg-primary text-white rounded-[6px] py-3 px-7"
               }`}
             onClick={() => setIsActive("change-password")}

@@ -17,7 +17,7 @@ export interface User {
   lastName: string;
   email: string;
   password: string;
-  role: "admin" | "user" | string;
+  role: "ADMIN" | "USER" | string;
   provider: "credentials" | "google" | string;
   profileImage: string;
   verified: boolean;
