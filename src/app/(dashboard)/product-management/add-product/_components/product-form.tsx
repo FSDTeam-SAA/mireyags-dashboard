@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ImagePlus, Loader2, Trash2, UploadCloud, X } from "lucide-react";
+import { ArrowLeft, ImagePlus, Loader2, Trash2, UploadCloud, X } from "lucide-react";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 
@@ -22,7 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 const MAX_SUB_IMAGES = 4;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -329,14 +329,12 @@ export default function ProductForm() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl p-4 md:p-6">
-      <Card className="rounded-2xl shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl font-semibold">Add New Product</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <Form {...form}>
+    <div className="bg-white p-6 rounded-[8px] border border-[#E4E4E4]">
+      <Link href="/product-management">
+        <button className="bg-primary flex items-center gap-2 text-lg font-normal text-white h-[40px] rounded-[8px] leading-normal  px-5"><ArrowLeft /> Back</button>
+      </Link>
+      <h4 className="text-lg md:text-xl lg:text-2xl text-[#4C4C4C] leading-normal font-semibold py-5">Add New Product</h4>
+       <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <FormField
@@ -344,9 +342,9 @@ export default function ProductForm() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product Name</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Product Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter product name" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" placeholder="Enter product name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -358,9 +356,9 @@ export default function ProductForm() {
                   name="weight"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Weight</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Weight</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. 1kg" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" placeholder="e.g. 1kg" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -372,9 +370,9 @@ export default function ProductForm() {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Price</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="e.g. 120" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" type="number" placeholder="e.g. 120" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -386,9 +384,9 @@ export default function ProductForm() {
                   name="offerPrice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Offer Price</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Offer Price</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="e.g. 100" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" type="number" placeholder="e.g. 100" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -400,9 +398,9 @@ export default function ProductForm() {
                   name="stock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Stock</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Stock</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="e.g. 50" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" type="number" placeholder="e.g. 50" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -414,9 +412,9 @@ export default function ProductForm() {
                   name="sizesInput"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sizes</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Sizes</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. S, M, L" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" placeholder="e.g. S, M, L" {...field} />
                       </FormControl>
                       <FormDescription>
                         Comma separated sizes. Example: S, M, L
@@ -431,9 +429,9 @@ export default function ProductForm() {
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category ID</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Category ID</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter category id" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" placeholder="Enter category id" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -445,9 +443,9 @@ export default function ProductForm() {
                   name="brand"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Brand ID</FormLabel>
+                      <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Brand ID</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter brand id" {...field} />
+                        <Input className="w-full h-[48px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]" placeholder="Enter brand id" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -460,11 +458,11 @@ export default function ProductForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel className="text-lg font-medium text-[#1E1E1E] leading-normal">Description</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Write product description"
-                        className="min-h-[120px] resize-none"
+                        className="w-full h-[148px] text-base text-[#1E1E1E] leading-normal font-medium border border-[#CECECE] rounded-[8px] placeholder:text-[#CECECE]"
                         {...field}
                       />
                     </FormControl>
@@ -475,7 +473,7 @@ export default function ProductForm() {
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="mb-3 text-base font-semibold">Main Image</h3>
+                  <h3 className="text-lg font-medium text-[#1E1E1E] leading-normal pb-4">Main Image</h3>
 
                   {!mainImage ? (
                     <UploadBox
@@ -516,7 +514,7 @@ export default function ProductForm() {
 
                 <div>
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <h3 className="text-base font-semibold">Sub Images</h3>
+                    <h3 className="text-lg font-medium text-[#1E1E1E] leading-normal">Sub Images</h3>
                     <p className="text-sm text-slate-500">
                       {subImages.length}/{MAX_SUB_IMAGES} selected
                     </p>
@@ -566,22 +564,21 @@ export default function ProductForm() {
                 </div>
               </div>
 
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isPending} className="min-w-[160px]">
+              <div className="flex justify-center items-center pb-20">
+                <Button type="submit" disabled={isPending} className="text-lg font-normal text-white h-[44px] rounded-[8px] leading-normal  px-14">
                   {isPending ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Saving...
                     </>
                   ) : (
-                    "Save Product"
+                    "Save"
                   )}
                 </Button>
               </div>
             </form>
           </Form>
-        </CardContent>
-      </Card>
+      
     </div>
   );
 }

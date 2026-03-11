@@ -14,7 +14,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void // Callback for page change
 }
 
-const ClaudePagination: React.FC<PaginationProps> = ({
+const MireyagsPagination: React.FC<PaginationProps> = ({
   totalPages,
   currentPage,
   onPageChange,
@@ -121,4 +121,4 @@ const ClaudePagination: React.FC<PaginationProps> = ({
   )
 }
 
-export default ClaudePagination
+export default MireyagsPagination

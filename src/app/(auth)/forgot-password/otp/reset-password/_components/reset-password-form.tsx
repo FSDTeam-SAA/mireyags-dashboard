@@ -73,7 +73,7 @@ const ResetPasswordForm = () => {
       return res.json();
     },
     onSuccess: (data)=>{
-      if(!data?.success){
+      if(!data?.status){
         toast.error(data?.message || "Something went wrong");
         return
       }else{
