@@ -85,7 +85,7 @@ export default function ProductTable({
                 <td className="px-4 py-4">
                   <div className="flex items-center justify-end gap-3">
                     <Link
-                      href={`/dashboard/products/${product._id}/edit`}
+                      href={`/product-management/edit-product/${product._id}t`}
                       className="text-[#495057] transition hover:text-[#12B5D3]"
                     >
                       <Pencil className="h-4 w-4" />
