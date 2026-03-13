@@ -220,7 +220,7 @@ export default function EditBrandForm({ id }: { id: string }) {
                     className="h-[48px] w-full rounded-[8px] border border-[#CECECE] text-base font-medium leading-normal text-[#1E1E1E] placeholder:text-[#CECECE]"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage  className="text-red-500"/>
               </FormItem>
             )}
           />

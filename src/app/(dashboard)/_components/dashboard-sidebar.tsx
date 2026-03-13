@@ -4,7 +4,9 @@ import {
   LogOut,
   Settings,
   Mail,
-  Users
+  Users,
+  ShoppingCart,
+  PackageSearch
 } from "lucide-react";
 
 import {
@@ -37,12 +39,12 @@ const items = [
   {
     title: "Product Management",
     url: "/product-management",
-    icon: Users,
+    icon: PackageSearch ,
   },
   {
     title: "Order Management",
     url: "/order-management",
-    icon: Users,
+    icon: ShoppingCart,
   },
   {
     title: "Customer Management",
@@ -52,12 +54,12 @@ const items = [
   {
     title: "Category Management",
     url: "/category-management",
-    icon: Users,
+    icon: LayoutDashboard,
   },
   {
     title: "Brand Management",
     url: "/brand-management",
-    icon: Users,
+    icon: PackageSearch,
   },
   {
     title: "Contact Management",

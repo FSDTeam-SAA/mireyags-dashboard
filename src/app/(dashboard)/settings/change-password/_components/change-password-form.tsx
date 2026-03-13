@@ -121,7 +121,7 @@ const ChangePasswordForm = () => {
                       )}
                     </span>
                   </div>
-                  <FormMessage />
+                  <FormMessage  className="text-red-500"/>
                 </FormItem>
               )}
             />
@@ -154,7 +154,7 @@ const ChangePasswordForm = () => {
                       )}
                     </span>
                   </div>
-                  <FormMessage />
+                  <FormMessage  className="text-red-500"/>
                 </FormItem>
               )}
             />
@@ -188,7 +188,7 @@ const ChangePasswordForm = () => {
                       )}
                     </span>
                   </div>
-                  <FormMessage />
+                  <FormMessage  className="text-red-500"/>
                 </FormItem>
               )}
             />
