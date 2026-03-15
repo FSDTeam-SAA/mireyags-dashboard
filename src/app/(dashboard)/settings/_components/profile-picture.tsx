@@ -25,7 +25,7 @@ const ProfilePicture = () => {
   const { data } = useQuery<UserProfileApiResponse>({
     queryKey: ["profile-img"],
     queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ const ProfilePicture = () => {
     mutationKey: ["update-profile-image"],
     mutationFn: async (formData: FormData) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/upload-avatar`,
         {
           method: "PUT",
           headers: {
@@ -65,11 +65,11 @@ const ProfilePicture = () => {
   });
 
   useEffect(() => {
-    const image = data?.data?.user?.profileImage;
+    const image = data?.data?.profileImage
     if (image) {
       setProfileImage(image);
     }
-  }, [data?.data?.user?.profileImage]);
+  }, [data?.data?.profileImage]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -130,8 +130,8 @@ const ProfilePicture = () => {
         </div>
 
         <div>
-          <h4 className="text-xl md:text-2xl font-semibold text-[#191919] leading-normal pb-1">Rambo Bam</h4>
-          <p className="text-base text-[#191919] font-normal leading-normal">rambobam@gmail.com</p>
+          <h4 className="text-xl md:text-2xl font-semibold text-[#191919] leading-normal pb-1">{data?.data?.name || "N/A"}</h4>
+          <p className="text-base text-[#191919] font-normal leading-normal">{data?.data?.email || "N/A"}</p>
         </div>
       </div>
     </div>

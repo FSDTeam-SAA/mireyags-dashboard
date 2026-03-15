@@ -3,6 +3,7 @@ export interface CustomerData {
   userId: string;
   name: string;
   email: string;
+  image: string;
   totalOrders: number;
   totalQuantity: number;
   totalSpent: number;

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Bar,
   BarChart,
@@ -11,8 +12,13 @@ import {
   YAxis,
 } from "recharts";
 import { ChevronDown } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import TableSkeletonWrapper from "@/components/shared/TableSkeletonWrapper/TableSkeletonWrapper";
+import ErrorContainer from "@/components/shared/ErrorContainer/ErrorContainer";
+import NotFound from "@/components/shared/NotFound/NotFound";
+import { GrowthApiResponse } from "./revenue-activity-data-type";
 
 type CustomerChartItem = {
   month: string;
@@ -28,20 +34,36 @@ type CustomTooltipProps = {
   label?: string;
 };
 
-const dummyCustomerData: CustomerChartItem[] = [
-  { month: "Jan", customers: 25000 },
-  { month: "Feb", customers: 22000 },
-  { month: "Mar", customers: 29000 },
-  { month: "Apr", customers: 14000 },
-  { month: "May", customers: 24000 },
-  { month: "Jun", customers: 7000 },
-  { month: "Jul", customers: 17000 },
-  { month: "Aug", customers: 26000 },
-  { month: "Sep", customers: 31000 },
-  { month: "Oct", customers: 15000 },
-  { month: "Nov", customers: 20500 },
-  { month: "Dec", customers: 23000 },
-];
+
+const monthLabelMap: Record<string, string> = {
+  jan: "Jan",
+  feb: "Feb",
+  mar: "Mar",
+  apr: "Apr",
+  may: "May",
+  jun: "Jun",
+  jul: "Jul",
+  aug: "Aug",
+  sep: "Sep",
+  oct: "Oct",
+  nov: "Nov",
+  dec: "Dec",
+};
+
+const monthKeys = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec",
+] as const;
 
 const generateYearOptions = () => {
   const currentYear = new Date().getFullYear();
@@ -64,35 +86,71 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 }
 
 export default function TotalCustomersChart() {
+  const { data: session } = useSession();
+  const token = (session?.user as { accessToken?: string })?.accessToken;
+
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const yearOptions = generateYearOptions();
 
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<GrowthApiResponse>({
+    queryKey: ["total-customers", selectedYear],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/growth?year=${selectedYear}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  // const { data, isLoading, isError } = useQuery({
-//   queryKey: ["total-customers", selectedYear],
-//   queryFn: async () => {
-//     const res = await fetch(
-//       `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/total-customers?year=${selectedYear}`,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//
-//     if (!res.ok) {
-//       throw new Error("Failed to fetch customer chart data");
-//     }
-//
-//     return res.json();
-//   },
-//   enabled: !!token,
-// });
-//
-// const chartData = data?.data || dummyCustomerData;
+      if (!res.ok) {
+        throw new Error("Failed to fetch customer chart data");
+      }
 
-  return (
-    <div className="px-4 pb-6 sm:px-6">
+      return res.json();
+    },
+    enabled: true, // later change to !!token if needed
+  });
+
+  const chartData = useMemo<CustomerChartItem[]>(() => {
+    const customersByMonth = data?.data?.customersByMonth;
+
+    if (!customersByMonth) return [];
+
+    return monthKeys.map((key) => ({
+      month: monthLabelMap[key],
+      customers: customersByMonth[key] ?? 0,
+    }));
+  }, [data]);
+
+  let content;
+
+  if (isLoading) {
+    content = (
+      <div className="pt-4">
+        <TableSkeletonWrapper count={3} />
+      </div>
+    );
+  } else if (isError) {
+    content = (
+      <ErrorContainer
+        message={(error as Error)?.message || "Something went wrong"}
+      />
+    );
+  } else if (!chartData.length) {
+    content = (
+      <NotFound message="Oops! No data available. Modify your filters or check your internet connection." />
+    );
+  } else {
+    content = (
       <Card className="rounded-2xl border border-[#E9ECEF] shadow-none">
         <CardHeader className="pb-2">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -113,7 +171,7 @@ export default function TotalCustomersChart() {
               >
                 {yearOptions.map((year) => (
                   <option key={year} value={year}>
-                    {year}-{String(year + 1).slice(-2)}
+                    {year}
                   </option>
                 ))}
               </select>
@@ -127,11 +185,12 @@ export default function TotalCustomersChart() {
           <div className="h-[320px] w-full sm:h-[360px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={dummyCustomerData}
+                data={chartData}
                 margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
                 barCategoryGap="22%"
               >
                 <CartesianGrid vertical={false} stroke="#F1F3F5" />
+
                 <XAxis
                   dataKey="month"
                   tickLine={false}
@@ -139,12 +198,16 @@ export default function TotalCustomersChart() {
                   tickMargin={12}
                   className="text-xs"
                 />
+
                 <YAxis
                   tickLine={false}
                   axisLine={false}
                   tickMargin={12}
                   className="text-xs"
-                  tickFormatter={(value) => `${value / 1000}k`}
+                  allowDecimals={false}
+                  tickFormatter={(value) =>
+                    value >= 1000 ? `${value / 1000}k` : `${value}`
+                  }
                 />
 
                 <Tooltip
@@ -163,6 +226,8 @@ export default function TotalCustomersChart() {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    );
+  }
+
+  return <div className="px-4 pb-6 sm:px-6">{content}</div>;
 }

@@ -1,6 +1,14 @@
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { CustomerData } from "./customer-management-data-type";
+import Image from "next/image";
+
+import noUser from "../../../../../public/assets/images/no-user.jpeg";
 
 const CustomerManagementView = ({
   open,
@@ -16,7 +24,6 @@ const CustomerManagementView = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg p-6 bg-white !rounded-[12px]">
-        
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-[#343A40]">
             Customer Details
@@ -24,7 +31,18 @@ const CustomerManagementView = ({
         </DialogHeader>
 
         <div className="mt-4 space-y-5">
-          
+          {/* Name */}
+          <div>
+            <p className="text-sm font-semibold text-gray-800 pb-1">Image</p>
+            <Image
+              src={customerData?.image || noUser}
+              alt={customerData?.name}
+              width={200}
+              height={200}
+              className="w-12 h-12 object-cover rounded-[8px]"
+            />
+          </div>
+
           {/* Name */}
           <div>
             <p className="text-sm font-semibold text-gray-800">Name</p>
@@ -40,19 +58,15 @@ const CustomerManagementView = ({
           {/* Phone */}
           <div>
             <p className="text-sm font-semibold text-gray-800">Amount</p>
-            <p className="text-sm text-gray-600">{customerData.totalSpent}</p>
+            <p className="text-sm text-gray-600">$ {customerData.totalSpent}</p>
           </div>
 
           {/* Date */}
           <div>
             <p className="text-sm font-semibold text-gray-800">Purchase</p>
-            <p className="text-sm text-gray-600">
-              {customerData?.totalOrders}
-            </p>
+            <p className="text-sm text-gray-600">{customerData?.totalOrders}</p>
           </div>
-
         </div>
-
       </DialogContent>
     </Dialog>
   );

@@ -62,7 +62,7 @@ const ChangePasswordForm = () => {
         body: JSON.stringify(values),
       }).then((res) => res.json()),
     onSuccess: (data) => {
-      if (!data?.success) {
+      if (!data?.status) {
         toast.error(data?.message || "Something went wrong");
         return;
       }
@@ -98,7 +98,7 @@ const ChangePasswordForm = () => {
               name="oldPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-medium text-[#3B4759] leading-[120%]">
+                  <FormLabel className="text-base text-[#1E1E1E] leading-[120%] font-medium">
                     Current Password
                   </FormLabel>
                   <div className="relative">
@@ -107,7 +107,7 @@ const ChangePasswordForm = () => {
                         {...field}
                         type={showCurrent ? "text" : "password"}
                         placeholder="••••••••••••••••••"
-                        className="h-[48px] w-full rounded-[4px] border-[#C0C3C1] p-3 placeholder:text-[#8E959F] text-[#3B4759] text-base ring-0 outline-none leading-[120%] font-normal"
+                        className="h-[48px] w-full rounded-[4px] border-[#C0C3C1] p-3 placeholder:text-[#8E959F] text-[#1E1E1E] text-base ring-0 outline-none leading-[120%] font-medium"
                       />
                     </FormControl>
                     <span
@@ -131,7 +131,7 @@ const ChangePasswordForm = () => {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-medium text-[#3B4759] leading-[120%]">
+                  <FormLabel className="text-base text-[#1E1E1E] leading-[120%] font-medium">
                     New Password
                   </FormLabel>
                   <div className="relative">
@@ -140,7 +140,7 @@ const ChangePasswordForm = () => {
                         {...field}
                         type={showNew ? "text" : "password"}
                         placeholder="••••••••••••••••••"
-                        className="h-[48px] w-full rounded-[4px] border-[#C0C3C1] p-3 placeholder:text-[#8E959F] text-[#3B4759] text-base ring-0 outline-none leading-[120%] font-normal"
+                        className="h-[48px] w-full rounded-[4px] border-[#C0C3C1] p-3 placeholder:text-[#8E959F] text-[#1E1E1E] text-base ring-0 outline-none leading-[120%] font-medium"
                       />
                     </FormControl>
                     <span
@@ -165,7 +165,7 @@ const ChangePasswordForm = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-medium text-[#3B4759] leading-[120%]">
+                  <FormLabel className="text-base text-[#1E1E1E] leading-[120%] font-medium">
                     Confirm New Password
                   </FormLabel>
                   <div className="relative">
@@ -174,7 +174,7 @@ const ChangePasswordForm = () => {
                         {...field}
                         type={showConfirm ? "text" : "password"}
                         placeholder="••••••••••••••••••"
-                        className="h-[48px] w-full rounded-[4px] border-[#C0C3C1] p-3 placeholder:text-[#8E959F] text-[#3B4759] text-base ring-0 outline-none leading-[120%] font-normal"
+                        className="h-[48px] w-full rounded-[4px] border-[#C0C3C1] p-3 placeholder:text-[#8E959F] text-[#1E1E1E] text-base ring-0 outline-none leading-[120%] font-medium"
                       />
                     </FormControl>
                     <span

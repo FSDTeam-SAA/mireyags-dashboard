@@ -1,33 +1,34 @@
 "use client";
-import { DollarSign, PackageSearch, ShoppingCart, Users } from "lucide-react";
+import { PackageSearch } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import DashboardOverviewSkeleton from "./dashboard-overview-skeleton";
 import ErrorContainer from "@/components/shared/ErrorContainer/ErrorContainer";
 import { useSession } from "next-auth/react";
+import ProductOverviewSkeleton from "../../product-management/_components/product-overview-skeleton";
 
-export interface DashboardOverviewApiResponse {
+export interface OrderStatusStatsApiResponse {
   status: boolean;
   message: string;
-  data: DashboardStats;
+  data: OrderStatusStats;
 }
 
-export interface DashboardStats {
-  totalRevenue: number;
-  totalProducts: number;
-  totalOrders: number;
-  totalCustomers: number;
+export interface OrderStatusStats {
+  placed: number;
+  processing: number;
+  shipped: number;
+  delivered: number;
+  cancelled: number;
 }
 
-export function DashboardOverview() {
+export function OrderOverview() {
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
 
   const { data, isLoading, isError, error } =
-    useQuery<DashboardOverviewApiResponse>({
-      queryKey: ["dashboard-overview"],
+    useQuery<OrderStatusStatsApiResponse>({
+      queryKey: ["order-overview"],
       queryFn: async () => {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/stats`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/statistics`,
           {
             method: "GET",
             headers: {
@@ -47,7 +48,7 @@ export function DashboardOverview() {
   if (isLoading) {
     content = (
       <div className="p-6">
-        <DashboardOverviewSkeleton />
+        <ProductOverviewSkeleton />
       </div>
     );
   } else if (isError) {
@@ -58,30 +59,14 @@ export function DashboardOverview() {
     );
   } else {
     content = (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 pt-6">
         <div className="md:col-span-1 h-[89px] flex items-center justify-between bg-white shadow-[0px_4px_6px_0px_#0000001A] px-4 rounded-[8px]">
           <div>
             <p className="text-sm font-semibold text-[#424242] leading-[120%]">
-              Total Revenue
+              Delivered Products
             </p>
-            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-2">
-              ${data?.data?.totalRevenue?.toFixed(2) || 0}
-            </p>
-          </div>
-          <div>
-            <span className="flex items-center justify-center bg-[#E6F4E6] p-3 rounded-full">
-              <DollarSign className="w-6 h-6 text-primary" />
-            </span>
-          </div>
-        </div>
-
-        <div className="md:col-span-1 h-[89px] flex items-center justify-between bg-white shadow-[0px_4px_6px_0px_#0000001A] px-4 rounded-[8px]">
-          <div>
-            <p className="text-sm font-semibold text-[#424242] leading-[120%]">
-              Total Products
-            </p>
-            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-2">
-              {data?.data?.totalProducts || 0}
+            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-1">
+              {data?.data?.delivered || 0}
             </p>
           </div>
           <div>
@@ -94,15 +79,15 @@ export function DashboardOverview() {
         <div className="md:col-span-1 h-[89px] flex items-center justify-between bg-white shadow-[0px_4px_6px_0px_#0000001A] px-4 rounded-[8px]">
           <div>
             <p className="text-sm font-semibold text-[#424242] leading-[120%]">
-              Total Orders
+              Shipping Products
             </p>
-            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-2">
-              {data?.data?.totalOrders || 0}
+            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-1">
+              {data?.data?.shipped || 0}
             </p>
           </div>
           <div>
             <span className="flex items-center justify-center bg-[#E6F4E6] p-3 rounded-full">
-              <ShoppingCart className="w-6 h-6 text-primary" />
+              <PackageSearch className="w-6 h-6 text-primary" />
             </span>
           </div>
         </div>
@@ -110,15 +95,15 @@ export function DashboardOverview() {
         <div className="md:col-span-1 h-[89px] flex items-center justify-between bg-white shadow-[0px_4px_6px_0px_#0000001A] px-4 rounded-[8px]">
           <div>
             <p className="text-sm font-semibold text-[#424242] leading-[120%]">
-              Total Customers
+              Processing Products
             </p>
-            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-2">
-              {data?.data?.totalCustomers || 0}
+            <p className="text-3xl leading-[120%] text-primary font-bold font-hexco pt-1">
+              {data?.data?.processing || 0}
             </p>
           </div>
           <div>
             <span className="flex items-center justify-center bg-[#E6F4E6] p-3 rounded-full">
-              <Users className="w-6 h-6 text-primary" />
+              <PackageSearch className="w-6 h-6 text-primary" />
             </span>
           </div>
         </div>
