@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
@@ -87,6 +87,13 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    void form.handleSubmit(onSubmit)(event);
+  };
+
   return (
     <div>
       <div className="w-full md:w-[570px] bg-white rounded-[16px] border-[2px] border-[#E7E7E7] shadow-[0px_0px_32px_0px_#0000001F] p-5 md:p-6">
@@ -104,7 +111,8 @@ const LoginForm = () => {
         </p>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            method="post"
+            onSubmit={handleSubmit}
             className="space-y-4 pt-5 md:pt- lg:pt-8"
           >
             <FormField
